@@ -1,0 +1,10 @@
+name: cq
+version: 0.1.0
+
+authors:
+  - Bryan Mulvihill <mulvihill.bryan@gmail.com>
+
+description: |
+  In memory queue
+
+license: MIT
