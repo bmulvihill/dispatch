@@ -9,12 +9,8 @@ module Performable
       job_queue.push(work)
     end
 
-    def dispatcher
-      Cq::Dispatcher.instance
-    end
-
     def job_queue
-      dispatcher.job_queue
+      Dispatcher.job_queue
     end
   end
 end
