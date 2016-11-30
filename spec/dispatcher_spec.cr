@@ -10,7 +10,7 @@ module Cq
         Dispatcher.stopped?.should eq(true)
       end
 
-      it "can be restarted"do
+      it "can be restarted" do
         Dispatcher.stop
         Dispatcher.running?.should eq(false)
         Dispatcher.start

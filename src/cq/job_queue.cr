@@ -20,12 +20,3 @@ module Cq
     end
   end
 end
-
-class FakeJob
-  include Performable
-
-  def perform(name)
-    sleep 2
-    p "PERFORMED #{name}"
-  end
-end

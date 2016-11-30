@@ -4,7 +4,7 @@ module Cq
   class Dispatcher
     INSTANCE = new
 
-    # placehold for class config
+    # placeholder for class config
     def self.config
       nil
     end
@@ -50,9 +50,11 @@ module Cq
       workers.each &.start
 
       spawn do
-        work = job_queue.pop
-        worker = worker_queue.receive
-        worker.push(work)
+        while running?
+          work = job_queue.pop
+          worker = worker_queue.receive
+          worker.push(work)
+        end
       end
     end
 
@@ -79,6 +81,5 @@ module Cq
         end
       end
     end
-
   end
 end

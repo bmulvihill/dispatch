@@ -4,8 +4,8 @@ module Cq
 
     def initialize(worker_queue)
       @worker_queue = worker_queue
-      @job_queue = JobQueue.new # queue for jobs this worker will be assigned
-      worker_queue.send(job_queue)# Add jobs channel to worker queue so dispatcher can assign
+      @job_queue = JobQueue.new    # queue for jobs this worker will be assigned
+      worker_queue.send(job_queue) # Add jobs channel to worker queue so dispatcher can assign
 
       @stopped = true
       @id = ""
@@ -21,7 +21,6 @@ module Cq
           worker_queue.send(job_queue)
         end
       end
-      
       true
     end
 
