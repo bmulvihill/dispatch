@@ -4,10 +4,10 @@ crystal-queue
 ### Super simple job queueing
 ```crystal
 # example.cr
-require "./src/Dispatch"
+require "./src/dispatch"
 
 class FakeJob
-  include Dispatch::Performable
+  include Dispatchable
 
   def perform(name)
     p "#{Time.now}: Hello, #{name}"
