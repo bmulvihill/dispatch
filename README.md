@@ -1,7 +1,6 @@
 # Dispatch
-crystal-queue
 
-### Super simple job queueing
+### Super simple in-memory job queuing
 ```crystal
 # example.cr
 require "./src/dispatch"
@@ -14,18 +13,16 @@ class FakeJob
   end
 end
 
-FakeJob.perform_async("Bob")
-FakeJob.perform_async("Emily")
-FakeJob.perform_now("James")
-FakeJob.perform_in(5.seconds, "Billy")
-FakeJob.perform_async("Maddy")
+FakeJob.dispatch("Bob")
+FakeJob.dispatch("Emily")
+FakeJob.dispatch_in(5.seconds, "Billy")
+FakeJob.dispatch("Maddy")
 
 sleep 10
 ```
 
 Output:
 ```
-"2016-11-30 15:51:04 -0500: Hello, James"
 "2016-11-30 15:51:04 -0500: Hello, Bob"
 "2016-11-30 15:51:04 -0500: Hello, Emily"
 "2016-11-30 15:51:04 -0500: Hello, Maddy"

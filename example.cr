@@ -9,10 +9,9 @@ class FakeJob
   end
 end
 
-FakeJob.perform_async("Bob")
-FakeJob.perform_async("Emily")
-FakeJob.perform_now("James")
-FakeJob.perform_in(5.seconds, "Billy")
-FakeJob.perform_async("Maddy")
+FakeJob.dispatch("Bob")
+FakeJob.dispatch("Emily")
+FakeJob.dispatch_in(5.seconds, "Billy")
+FakeJob.dispatch("Maddy")
 
 sleep 10
