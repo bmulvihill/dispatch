@@ -1,12 +1,9 @@
 # A Dispatcher is responsible for pulling work off the job queue
 # It assigns the work to the next available worker
-module Cq
+module Dispatch
   class Dispatcher
-    INSTANCE = new
-
-    # placeholder for class config
     def self.config
-      nil
+      # placeholder for class config
     end
 
     def self.start
@@ -29,30 +26,36 @@ module Cq
       INSTANCE.workers
     end
 
-    def self.job_queue
-      INSTANCE.job_queue
+    def self.dispatch(work)
+      INSTANCE.job_queue.push(work)
+    end
+
+    def self.dispatch_in(interval, work)
+      spawn do
+        sleep interval
+        INSTANCE.job_queue.push(work)
+      end
     end
 
     getter job_queue
     getter workers
 
-    private def initialize(num_workers = 5)
-      @job_queue = Cq::JobQueue.new(100)
-      @worker_queue = Channel(JobQueue).new(num_workers)
+    private def initialize(num_workers = 5, queue_size = 100)
+      @job_queue = Dispatch::JobQueue.new(queue_size)
+      @dispatch_queue = Channel(JobQueue).new(num_workers)
       @workers = Array(Worker).new(num_workers)
       @num_workers = num_workers
-      @stopped = true
-      create_workers
     end
 
     def start
-      @stopped = false
+      return false if running?
+      create_workers
       workers.each &.start
 
       spawn do
         while running?
           work = job_queue.pop
-          worker = worker_queue.receive
+          worker = dispatch_queue.receive
           worker.push(work)
         end
       end
@@ -70,13 +73,14 @@ module Cq
       workers.each &.stop
     end
 
-    private getter worker_queue
+    private INSTANCE = new
+    private getter dispatch_queue
     private getter num_workers
 
     private def create_workers
-      if !worker_queue.full?
+      if !dispatch_queue.full?
         num_workers.times do |i|
-          worker = Worker.new(worker_queue)
+          worker = Worker.new(dispatch_queue)
           workers << worker
         end
       end

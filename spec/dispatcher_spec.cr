@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-module Cq
+module Dispatch
   describe Dispatcher do
     describe "#start and #stop" do
       it "can be started and stopped" do
@@ -16,6 +16,10 @@ module Cq
         Dispatcher.start
         Dispatcher.running?.should eq(true)
       end
+
+      it "will not start twice" do
+        Dispatcher.start.should eq(false)
+      end
     end
 
     describe "#workers" do
@@ -24,9 +28,13 @@ module Cq
       end
     end
 
-    describe "#job_queue" do
-      it "will return a buffered job queue" do
-        Dispatcher.job_queue.should be_a(JobQueue)
+    describe "#dispatch" do
+      it "will dispatch a unit of work" do
+        x = 1
+        work = Job.new { x += 1 }
+        Dispatcher.dispatch(work)
+        sleep 1
+        x.should eq(2)
       end
     end
   end
