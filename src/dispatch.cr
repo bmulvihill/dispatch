@@ -3,6 +3,7 @@ require "./dispatch/worker"
 require "./dispatch/dispatchable"
 require "./dispatch/dispatcher"
 require "./dispatch/job_queue"
+require "./dispatch/counter"
 require "logger"
 
 module Dispatch
@@ -12,12 +13,12 @@ module Dispatch
   @@logger = Logger.new(STDOUT)
 
   def self.process_exception(ex, klass)
-    msg = String.build do |io|
-      io << "Dispatch error: class: #{klass}\n"
+    error_msg = String.build do |io|
+      io << "Dispatch error:\n"
       io << "#{ex.class} #{ex}\n"
       io << ex.backtrace.nil? ? "" : ex.backtrace.join("\n")
     end
-    logger.error msg
+    logger.error error_msg
   end
 
   def self.logger=(logger)

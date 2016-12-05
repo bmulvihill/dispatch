@@ -7,10 +7,10 @@ module Dispatch
 
     def perform
       @work.call
-      true
+      Dispatch::SuccessCounter.increment
     rescue ex
+      Dispatch::FailureCounter.increment
       Dispatch.process_exception(ex, self)
-      false
     end
   end
 end

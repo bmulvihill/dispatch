@@ -1,14 +1,10 @@
 module Dispatch
   class Worker
-    getter id : String
-
     def initialize(dispatch_queue)
       @dispatch_queue = dispatch_queue
       @job_queue = JobQueue.new
-      dispatch_queue.send(job_queue)
-
       @stopped = true
-      @id = ""
+      dispatch_queue.send(job_queue)
     end
 
     def start
@@ -16,7 +12,6 @@ module Dispatch
       @stopped = false
 
       spawn do
-        @id = Fiber.current.object_id.to_s(36)
         while (work = job_queue.pop) && !stopped?
           work.perform
           dispatch_queue.send(job_queue)

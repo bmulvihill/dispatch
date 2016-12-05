@@ -10,13 +10,22 @@ module Dispatch
         x.should eq 2
       end
 
-      it "will return false if a job fails" do
-        String.build do |io|
+      it "updates the success counter" do
+        Dispatch::SuccessCounter.reset
+        job = Job.new { }
+        job.perform
+        Dispatch::SuccessCounter.value.should eq(1)
+      end
+
+      it "calls writes to the logger if a job fails" do
+        result = String.build do |io|
           logger = Logger.new(io)
           Dispatch.logger = logger
           job = Job.new { raise "Error!" }
-          job.perform.should eq(false)
+          job.perform
         end
+        result.should_not eq("")
+        Dispatch::FailureCounter.value.should eq(1)
       end
     end
   end

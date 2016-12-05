@@ -8,13 +8,6 @@ module Dispatch
         w.start.should eq(true)
       end
 
-      it "sets a worker id" do
-        w = Worker.new(Channel(JobQueue).new(1))
-        w.start
-        sleep 1
-        w.id.should_not eq("")
-      end
-
       it "will perform work" do
         dispatch_queue = Channel(JobQueue).new(1)
         w = Worker.new(dispatch_queue).start
