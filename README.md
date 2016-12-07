@@ -1,4 +1,5 @@
-# Dispatch
+# Dispatch [![Build Status](https://travis-ci.org/bmulvihill/dispatch.svg?branch=master)](https://travis-ci.org/bmulvihill/dispatch)
+
 
 ### Super simple in-memory job queuing
 ```crystal
