@@ -2,7 +2,6 @@ require "./spec_helper"
 
 module Dispatch
   describe Configuration do
-
     Spec.after_each do
       Dispatcher.configure do |config|
         config.num_workers = 5

@@ -2,7 +2,6 @@
 # It assigns the work to the next available worker
 module Dispatch
   class Dispatcher
-
     def self.instance
       @@instance ||= new(config)
     end
