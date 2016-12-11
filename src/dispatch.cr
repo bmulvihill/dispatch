@@ -1,3 +1,4 @@
+require "./dispatch/configuration"
 require "./dispatch/job"
 require "./dispatch/worker"
 require "./dispatch/dispatchable"

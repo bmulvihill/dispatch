@@ -2,49 +2,58 @@
 # It assigns the work to the next available worker
 module Dispatch
   class Dispatcher
+
+    def self.instance
+      @@instance ||= new(config)
+    end
+
     def self.config
-      # placeholder for class config
+      @@config ||= Configuration.new
+    end
+
+    def self.configure
+      yield(config)
     end
 
     def self.start
-      INSTANCE.start
+      instance.start
     end
 
     def self.stop
-      INSTANCE.stop
+      instance.stop
     end
 
     def self.stopped?
-      INSTANCE.stopped?
+      instance.stopped?
     end
 
     def self.running?
-      INSTANCE.running?
+      instance.running?
     end
 
     def self.workers
-      INSTANCE.workers
+      instance.workers
     end
 
     def self.dispatch(work)
-      INSTANCE.job_queue.push(work)
+      instance.job_queue.push(work)
     end
 
     def self.dispatch_in(interval, work)
       spawn do
         sleep interval
-        INSTANCE.job_queue.push(work)
+        instance.job_queue.push(work)
       end
     end
 
     getter job_queue
     getter workers
 
-    private def initialize(num_workers = 5, queue_size = 100)
-      @job_queue = Dispatch::JobQueue.new(queue_size)
-      @dispatch_queue = Channel(JobQueue).new(num_workers)
-      @workers = Array(Worker).new(num_workers)
-      @num_workers = num_workers
+    private def initialize(config : Configuration)
+      @job_queue = Dispatch::JobQueue.new(config.queue_size)
+      @dispatch_queue = Channel(JobQueue).new(config.num_workers)
+      @workers = Array(Worker).new(config.num_workers)
+      @config = config
     end
 
     def start
@@ -73,13 +82,12 @@ module Dispatch
       workers.each &.stop
     end
 
-    private INSTANCE = new
+    private getter config
     private getter dispatch_queue
-    private getter num_workers
 
     private def create_workers
       if !dispatch_queue.full?
-        num_workers.times do |i|
+        config.num_workers.times do |i|
           worker = Worker.new(dispatch_queue)
           workers << worker
         end
