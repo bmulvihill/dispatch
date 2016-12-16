@@ -1,25 +1,28 @@
-# A job queue holds Dispatch::Jobs waiting to be performed
-module Dispatch
-  class JobQueue
-    def initialize(size = nil)
-      if size
-        @queue = Channel(Dispatch::Job).new(size)
-      else
-        @queue = Channel(Dispatch::Job).new
-      end
-    end
-
-    def push(job)
-      queue.send(job)
-    end
-
-    def pop
-      queue.receive
-    end
-
-    private getter queue
-
-    delegate full?, to: queue
-    delegate empty?, to: queue
+class Channel::Buffered
+  def pop
+    receive
   end
+
+  def push(value)
+    send(value)
+  end
+
+  def size
+    @queue.size
+  end
+end
+
+class Channel::Unbuffered
+  def pop
+    receive
+  end
+
+  def push(value)
+    send(value)
+  end
+end
+
+# A job queue holds Dispatch::Jobs waiting to be executed
+module Dispatch
+  alias JobQueue = Channel(Dispatch::Job)
 end

@@ -1,14 +1,6 @@
 # A Dispatcher is responsible for pulling work off the job queue
 # It assigns the work to the next available worker
 module Dispatch
-  def self.config
-    @@config ||= Configuration.new
-  end
-
-  def self.configure
-    yield(config)
-  end
-
   class Dispatcher
     def self.instance
       @@instance ||= new(Dispatch.config)

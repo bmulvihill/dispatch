@@ -4,6 +4,8 @@ module Dispatchable
     extend Dispatchable::ClassMethods
   end
 
+  abstract def perform(*args)
+
   module ClassMethods
     def dispatch(*args)
       dispatcher.start unless dispatcher.running?
