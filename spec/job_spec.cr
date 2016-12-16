@@ -20,7 +20,7 @@ module Dispatch
       it "calls writes to the logger if a job fails" do
         result = String.build do |io|
           logger = Logger.new(io)
-          Dispatch.logger = logger
+          Dispatch.configure { |c| c.logger = logger }
           job = Job.new { raise "Error!" }
           job.perform
         end
