@@ -1,18 +1,4 @@
-class Channel::Buffered
-  def pop
-    receive
-  end
-
-  def push(value)
-    send(value)
-  end
-
-  def size
-    @queue.size
-  end
-end
-
-class Channel::Unbuffered
+class Channel
   def pop
     receive
   end

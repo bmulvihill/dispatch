@@ -18,14 +18,5 @@ module Dispatch
         queue.empty?.should eq(true)
       end
     end
-
-    describe "#size" do
-      it "a buffered queue will return the number of elements currently queued" do
-        queue = JobQueue.new(5)
-        queue.push(Job.new { })
-        queue.push(Job.new { })
-        queue.size.should eq(2)
-      end
-    end
   end
 end
