@@ -28,12 +28,9 @@ FakeJob.dispatch("Bob")
 FakeJob.dispatch("Emily")
 FakeJob.dispatch_in(5.seconds, "Billy")
 FakeJob.dispatch("Maddy")
-
 ErrorJob.dispatch
-
 Dispatch.successes # => 0
-
 sleep 6
 
 Dispatch.successes # => 4
-Dispatch.failures # => 1
+Dispatch.failures  # => 1
