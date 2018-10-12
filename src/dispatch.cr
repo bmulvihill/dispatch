@@ -1,10 +1,4 @@
-require "./dispatch/configuration"
-require "./dispatch/job"
-require "./dispatch/worker"
-require "./dispatch/dispatchable"
-require "./dispatch/dispatcher"
-require "./dispatch/job_queue"
-require "./dispatch/counter"
+require "./dispatch/*"
 require "logger"
 
 module Dispatch
