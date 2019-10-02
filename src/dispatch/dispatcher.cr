@@ -45,11 +45,11 @@ module Dispatch
       @dispatch_queue = Channel(JobQueue).new(config.num_workers)
       @workers = Array(Worker).new(config.num_workers)
       @config = config
+      create_workers
     end
 
     def start
       return false if running?
-      create_workers
       workers.each &.start
 
       spawn do
@@ -77,11 +77,9 @@ module Dispatch
     private getter dispatch_queue
 
     private def create_workers
-      if !dispatch_queue.full?
-        config.num_workers.times do |i|
-          worker = Worker.new(dispatch_queue)
-          workers << worker
-        end
+      config.num_workers.times do |i|
+        worker = Worker.new(dispatch_queue)
+        workers << worker
       end
     end
   end
