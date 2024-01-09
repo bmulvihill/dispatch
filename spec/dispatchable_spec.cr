@@ -3,8 +3,8 @@ require "./spec_helper"
 class FakeJob
   include Dispatchable
 
-  def perform(x)
-    x.value += 1
+  def perform(*args)
+    args[0].value += 1
   end
 end
 
