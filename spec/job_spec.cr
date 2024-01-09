@@ -18,13 +18,12 @@ module Dispatch
       end
 
       it "calls writes to the logger if a job fails" do
-        result = String.build do |io|
-          logger = Logger.new(io)
-          Dispatch.configure { |c| c.logger = logger }
+        Log.capture do |logs|
           job = Job.new { raise "Error!" }
           job.perform
+
+          logs.check(:error, /Dispatch error/)
         end
-        result.should_not eq("")
         Dispatch::FailureCounter.value.should eq(1)
       end
     end
